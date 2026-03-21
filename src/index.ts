@@ -1,8 +1,11 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import { DatabaseService } from './infrastructure/database/DatabaseService';
 import { SystemLogger } from './infrastructure/logger/SystemLogger';
+import { auditLogger } from './infrastructure/logger/AuditLogger';
 import { CommandRegistry, createCommandRegistry } from './application/registry/CommandRegistry';
 import { GuildConfigService } from './infrastructure/database/GuildConfigService';
+import { prizeSystem } from './domain/prizes/PrizeSystem';
+import { dmSystem } from './domain/prizes/DMSystem';
 
 const client = new Client({
   intents: [
@@ -43,6 +46,11 @@ client.on('ready', async () => {
   if (client.user) {
     SystemLogger.info(`Bot is in ${client.guilds.cache.size} guilds`);
   }
+
+  const dbService = DatabaseService.getInstance();
+  auditLogger.setDatabaseService(dbService);
+  prizeSystem.setClient(client);
+  dmSystem.setClient(client);
 });
 
 client.on('guildCreate', guild => {
