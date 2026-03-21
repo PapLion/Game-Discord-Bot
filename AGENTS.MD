@@ -19,7 +19,7 @@ Las dependencias SOLO apuntan hacia abajo. Nunca al revés.
 ## Documentación del proyecto
 SDLC/ANALISIS-REQUISITOS/ARCHITECH.MD — arquitectura completa
 SDLC/ANALISIS-REQUISITOS/RESOLVER-GAPS.MD — soluciones técnicas
-SDLC/DISEÑO/TEACHLEAD.MD — estándares y orden de implementación
+SDLC/DISEÑO/TECHLEAD.MD — estándares y orden de implementación
 SDLC/DISEÑO/UI-UX.MD — embeds, colores, flujos visuales
 SDLC/DISEÑO/QA.MD — casos críticos y tests requeridos
 SDLC/IMPLEMENTACION/ROADMAP.MD — plan de implementación
