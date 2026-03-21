@@ -12,7 +12,8 @@ import { EmbedFactory } from '../../presentation/embeds/EmbedFactory';
 import { GameError, ERROR_CODES } from '../../types/errors';
 import { SystemLogger } from '../../infrastructure/logger/SystemLogger';
 import { auditLogger } from '../../infrastructure/logger/AuditLogger';
-import { GAME_CONSTANTS } from '../../types/constants';
+import { GAME_CONSTANTS } from '../../types/GAME_CONSTANTS';
+import { leaderboardCache } from '../../infrastructure/cache/LeaderboardCache';
 
 /**
  * Mapeo de aliases de tipos de juego a GameType.
@@ -424,6 +425,9 @@ export class GameOrchestrator {
 
     // Destruir emitter de sesión
     this.scopedEventEmitter.destroySession(game['sessionId']);
+
+    // Invalidar cache del leaderboard
+    leaderboardCache.invalidate(guildId);
 
     // Remover de juegos activos
     this.activeGames.delete(guildId);

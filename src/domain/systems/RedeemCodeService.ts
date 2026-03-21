@@ -1,7 +1,7 @@
 import { getPrizeRepository, PrizeRepository } from '../prizes/PrizeRepository';
 import { UserRepository } from '../../infrastructure/database/UserRepository';
 import { SystemLogger } from '../../infrastructure/logger/SystemLogger';
-import { GAME_CONSTANTS } from '../../types/constants';
+import { GAME_CONSTANTS } from '../../types/GAME_CONSTANTS';
 
 export interface ClaimResult {
   success: boolean;

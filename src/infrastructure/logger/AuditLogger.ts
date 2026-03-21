@@ -176,6 +176,15 @@ class AuditLogger {
     });
   }
 
+  logDailyReward(userId: string, coins: number, streak: number, multiplier: number): string | null {
+    return this.log({
+      action: 'prize_awarded',
+      actorId: 'system',
+      targetId: userId,
+      metadata: { type: 'daily_reward', coins, streak, multiplier },
+    });
+  }
+
   confirmPending(auditLogId: string, confirmedBy: string): void {
     if (this.dbService && this.dbService.isInitialized()) {
       try {

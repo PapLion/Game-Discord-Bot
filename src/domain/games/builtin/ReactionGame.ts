@@ -2,7 +2,7 @@ import { TextChannel, Guild, Message, EmbedBuilder } from 'discord.js';
 import { BaseGame } from '../base/BaseGame';
 import { GameStrategy } from '../base/GameStrategy';
 import { Participant } from '../../../types/game.types';
-import { GAME_CONSTANTS } from '../../../types/constants';
+import { GAME_CONSTANTS } from '../../../types/GAME_CONSTANTS';
 import { EmbedFactory } from '../../../presentation/embeds/EmbedFactory';
 import { SystemLogger } from '../../../infrastructure/logger/SystemLogger';
 import { LiveMessageManager } from '../../../presentation/live/LiveMessageManager';

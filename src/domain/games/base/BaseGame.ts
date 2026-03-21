@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import { GameStrategy } from './GameStrategy';
 import { GameSession, Participant, GameStatus } from '../../../types/game.types';
 import { GameError, ERROR_CODES } from '../../../types/errors';
-import { GAME_CONSTANTS } from '../../../types/constants';
+import { GAME_CONSTANTS } from '../../../types/GAME_CONSTANTS';
 import { EmbedFactory } from '../../../presentation/embeds/EmbedFactory';
 import { LiveMessageManager } from '../../../presentation/live/LiveMessageManager';
 import {
@@ -17,6 +17,7 @@ import { auditLogger } from '../../../infrastructure/logger/AuditLogger';
 import { SystemLogger } from '../../../infrastructure/logger/SystemLogger';
 import { GuildConfig } from '../../../infrastructure/database/GuildConfigService';
 import { PendingPrizeService } from './PendingPrizeService';
+import { scoreService } from '../../systems/ScoreService';
 import { randomUUID } from 'crypto';
 
 /**
@@ -461,14 +462,14 @@ export abstract class BaseGame {
           DEFAULT_PRIZE_VALUE
         );
 
-        // Registrar al ganador en game_winners
-        const winnerId = randomUUID();
-        this.db.execute(
-          `INSERT INTO game_winners 
-            (id, session_id, user_id, game_type, score, won_at)
-           VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
-          [winnerId, this.sessionId, winner.userId, this.strategy.gameType, winner.score]
-        );
+        // Registrar al ganador en game_winners via ScoreService
+        await scoreService.updateAfterGame({
+          sessionId: this.sessionId,
+          winnerId: winner.userId,
+          guildId: this.guild.id,
+          gameType: this.strategy.gameType,
+          score: winner.score,
+        });
 
         // Actualizar status en DB
         this.db.execute(

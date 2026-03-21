@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
-import { EMBED_COLORS } from '../../types/constants';
+import { EMBED_COLORS } from '../../types/GAME_CONSTANTS';
 
 export interface GameAnnounceData {
   gameType: string;

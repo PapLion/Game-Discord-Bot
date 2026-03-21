@@ -19,6 +19,12 @@ import { StartCommand } from '../../presentation/commands/admin/StartCommand';
 import { JoinCommand } from '../../presentation/commands/player/JoinCommand';
 import { PlayCommand } from '../../presentation/commands/player/PlayCommand';
 import { RewardCommand } from '../../presentation/commands/player/RewardCommand';
+import { ScoreCommand } from '../../presentation/commands/player/ScoreCommand';
+import { LeaderboardCommand } from '../../presentation/commands/player/LeaderboardCommand';
+import { InventoryCommand } from '../../presentation/commands/player/InventoryCommand';
+import { HistoryCommand } from '../../presentation/commands/player/HistoryCommand';
+import { DailyCommand } from '../../presentation/commands/player/DailyCommand';
+import { GamesCommand } from '../../presentation/commands/player/GamesCommand';
 
 export interface CommandRegistryDeps {
   userRepository: IUserRepository;
@@ -56,6 +62,12 @@ export class CommandRegistry {
     this.register(new JoinCommand());
     this.register(new PlayCommand());
     this.register(new RewardCommand());
+    this.register(new ScoreCommand());
+    this.register(new LeaderboardCommand());
+    this.register(new InventoryCommand());
+    this.register(new HistoryCommand());
+    this.register(new DailyCommand());
+    this.register(new GamesCommand());
   }
 
   register(command: BotCommand): void {

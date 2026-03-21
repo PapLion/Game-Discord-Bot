@@ -9,7 +9,7 @@ import { RedeemAdapter } from './adapters/RedeemAdapter';
 import { dmSystem } from './DMSystem';
 import { auditLogger } from '../../infrastructure/logger/AuditLogger';
 import { SystemLogger } from '../../infrastructure/logger/SystemLogger';
-import { GAME_CONSTANTS } from '../../types/constants';
+import { GAME_CONSTANTS } from '../../types/GAME_CONSTANTS';
 import { Client } from 'discord.js';
 
 export interface ClaimResult {
