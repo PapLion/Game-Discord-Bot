@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { EmbedFactory } from '../src/presentation/embeds/EmbedFactory';
-import { EMBED_COLORS } from '../src/types/constants';
+import { EMBED_COLORS } from '../src/types/GAME_CONSTANTS';
 
 describe('EmbedFactory', () => {
   describe('game lifecycle', () => {

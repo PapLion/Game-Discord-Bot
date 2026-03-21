@@ -5,7 +5,7 @@ import { EmbedFactory } from '../../embeds/EmbedFactory';
 import { GameOrchestrator } from '../../../application/orchestrator/GameOrchestrator';
 import { SystemLogger } from '../../../infrastructure/logger/SystemLogger';
 import { GameError, ERROR_CODES } from '../../../types/errors';
-import { GAME_CONSTANTS } from '../../../types/constants';
+import { GAME_CONSTANTS } from '../../../types/GAME_CONSTANTS';
 
 /**
  * Comando de jugador para unirse a un juego activo.

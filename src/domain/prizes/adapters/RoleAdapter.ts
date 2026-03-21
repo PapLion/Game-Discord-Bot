@@ -1,6 +1,6 @@
 import { DeliveryResult, Prize } from '../../../types/prize.types';
 import { SystemLogger } from '../../../infrastructure/logger/SystemLogger';
-import { GAME_CONSTANTS } from '../../../types/constants';
+import { GAME_CONSTANTS } from '../../../types/GAME_CONSTANTS';
 import { Client, Role } from 'discord.js';
 
 export class RoleAdapter {
