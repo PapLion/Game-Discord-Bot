@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS pending_prizes (
   id            TEXT PRIMARY KEY,
   user_id       TEXT NOT NULL REFERENCES users(id),
   session_id    TEXT REFERENCES game_sessions(id),
-  prize_id      TEXT NOT NULL REFERENCES prizes(id),
+  prize_id      TEXT REFERENCES prizes(id),
   prize_type    TEXT NOT NULL,
   prize_value   TEXT NOT NULL,
   status        TEXT DEFAULT 'pending',

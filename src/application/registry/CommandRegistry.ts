@@ -15,6 +15,9 @@ import { AntiCheatMiddleware } from '../middleware/AntiCheatMiddleware';
 import { SessionValidationMiddleware } from '../middleware/SessionValidationMiddleware';
 import { EmbedFactory } from '../../presentation/embeds/EmbedFactory';
 import { Guild } from 'discord.js';
+import { StartCommand } from '../../presentation/commands/admin/StartCommand';
+import { JoinCommand } from '../../presentation/commands/player/JoinCommand';
+import { PlayCommand } from '../../presentation/commands/player/PlayCommand';
 
 export interface CommandRegistryDeps {
   userRepository: IUserRepository;
@@ -35,6 +38,7 @@ export class CommandRegistry {
     this.getUserRole = deps?.getUserRole ?? (() => BotRole.PLAYER);
 
     this.registerDefaultMiddleware();
+    this.registerGameCommands();
   }
 
   private registerDefaultMiddleware(): void {
@@ -44,6 +48,12 @@ export class CommandRegistry {
       AntiCheatMiddleware.create(),
       SessionValidationMiddleware.create(),
     ];
+  }
+
+  private registerGameCommands(): void {
+    this.register(new StartCommand());
+    this.register(new JoinCommand());
+    this.register(new PlayCommand());
   }
 
   register(command: BotCommand): void {
