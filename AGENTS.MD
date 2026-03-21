@@ -1,7 +1,7 @@
 # Discord Game Bot — Agent Context
 
 ## Stack
-Node.js 20 LTS | TypeScript 5.4 | discord.js 14.15 | better-sqlite3 9.4
+Node.js 20 LTS | TypeScript 5.4 | discord.js 14.15 | better-sqlite3 9.6
 
 ## Arquitectura
 Layered: presentation → application → domain → infrastructure
