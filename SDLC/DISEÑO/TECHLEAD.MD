@@ -13,7 +13,7 @@
   "runtime":    "Node.js 20 LTS",
   "language":   "TypeScript 5.4",
   "framework":  "discord.js 14.15",
-  "database":   "better-sqlite3 9.4",
+  "database":   "better-sqlite3 9.6",
   "logger":     "winston 3.13",
   "testing":    "vitest 1.6",
   "linter":     "eslint 9 + @typescript-eslint 7",
