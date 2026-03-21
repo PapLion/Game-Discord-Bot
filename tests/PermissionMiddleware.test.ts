@@ -10,16 +10,7 @@ import { BotCommand } from '../src/types/command.types';
 const createMockCommand = (requiredRole: BotRole): BotCommand => ({
   name: 'test',
   aliases: [],
-  requiredRole:
-    requiredRole === BotRole.OWNER
-      ? 'OWNER'
-      : requiredRole === BotRole.ADMIN
-        ? 'ADMIN'
-        : requiredRole === BotRole.MODERATOR
-          ? 'MODERATOR'
-          : requiredRole === BotRole.PLAYER
-            ? 'PLAYER'
-            : 'BANNED',
+  requiredRole,
   cooldown: 0,
   execute: vi.fn(),
 });

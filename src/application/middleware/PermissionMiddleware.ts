@@ -59,7 +59,7 @@ export class PermissionMiddleware extends BaseMiddleware {
     }
 
     const userRole = this.getUserRole(user);
-    const requiredRole = parseRoleString(command.requiredRole);
+    const requiredRole = command.requiredRole;
 
     if (!hasPermission(userRole, requiredRole)) {
       const requiredRoleName = getRoleName(requiredRole);

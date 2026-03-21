@@ -4,11 +4,12 @@ import {
   CooldownMiddlewareContext,
 } from '../src/application/middleware/CooldownMiddleware';
 import { BotCommand } from '../src/types/command.types';
+import { BotRole } from '../src/domain/players/PermissionService';
 
 const createMockCommand = (name: string, cooldown: number): BotCommand => ({
   name,
   aliases: [],
-  requiredRole: 'PLAYER',
+  requiredRole: BotRole.PLAYER,
   cooldown,
   execute: vi.fn(),
 });

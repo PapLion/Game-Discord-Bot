@@ -5,6 +5,7 @@ import crypto from 'crypto';
 export type AuditAction =
   | 'prize_awarded'
   | 'prize_claimed'
+  | 'prize_pending_created'
   | 'admin_reward'
   | 'code_loaded'
   | 'code_claimed'

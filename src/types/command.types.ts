@@ -1,4 +1,5 @@
 import { Message, MessageCreateOptions } from 'discord.js';
+import { BotRole } from '../domain/players/PermissionService';
 
 export interface CommandContext {
   userId: string;
@@ -13,7 +14,7 @@ export interface CommandContext {
 export interface BotCommand {
   name: string;
   aliases: string[];
-  requiredRole: string;
+  requiredRole: BotRole;
   cooldown: number;
   execute(ctx: CommandContext): Promise<void>;
 }
