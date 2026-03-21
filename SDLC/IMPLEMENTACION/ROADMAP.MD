@@ -440,20 +440,25 @@ SDLC/DISEÑO/
 
 ## Resumen del Roadmap
 
-| Paso | Qué | Quién | Bloque TECHLEAD |
-|---|---|---|---|
-| R-A | Setup del proyecto | OpenCode | Bloque 1 (parte) |
-| R-B | Fundación técnica | OpenCode | Bloque 1 |
-| R-C | Comandos y permisos | OpenCode | Bloque 2 |
-| R-D | Core del juego — Trivia | OpenCode | Bloque 3 |
-| R-E | Sistema de premios | OpenCode | Bloque 4 |
-| R-F | 7 juegos restantes | OpenCode | Bloque 5 |
-| R-G | Features de plataforma | OpenCode | Bloque 6 |
-| R-H | Admin, Scheduler, Config | OpenCode | Bloque 7 |
-| R-I | Juegos especiales | OpenCode | Bloque 8 |
-| R-J | Hardening y cierre | OpenCode | Bloque 9 |
-| R-K | Validación manual | **Tú** | QA.MD |
-| R-L | Despliegue y entrega | OpenCode + Tú | — |
+> **Modos de OpenCode:**
+> - **Plan → Build** = Usa Plan Mode para revisar, luego Build para ejecutar. Para bloques con riesgo alto.
+> - **Build directo** = Ejecuta directo sin plan. Para bloques con spec clara y bajo riesgo.
+> - **Plan → SDD Orchestrator** = Para bloques grandes con múltiples sistemas en paralelo. Overhead justificado.
+
+| Paso | Qué | Modo OpenCode | Bloque TECHLEAD | Razón del modo |
+|---|---|---|---|---|
+| R-A | Setup del proyecto | Plan → Build | Bloque 1 (parte) | Base del proyecto — error aquí rompe todo |
+| R-B | Fundación técnica | Plan → Build | Bloque 1 | DB + tipos + loggers — crítico, sin retorno fácil |
+| R-C | Comandos y permisos | Plan → Build | Bloque 2 | EmbedFactory + Chain — muchos archivos coordinados |
+| R-D | Core del juego | Plan → SDD Orchestrator | Bloque 3 | BaseGame + GameOrchestrator + 3 comandos en paralelo |
+| R-E | Sistema de premios | Plan → SDD Orchestrator | Bloque 4 | 6 adapters + DMSystem + optimistic locking en paralelo |
+| R-F | 7 juegos restantes | Build directo | Bloque 5 | Spec clara — cada juego es independiente, bajo riesgo |
+| R-G | Features de plataforma | Plan → Build | Bloque 6 | StreakSystem + AntiCheat + 6 comandos — coordinación alta |
+| R-H | Admin, Scheduler, Config | Build directo | Bloque 7 | Spec clara en RESOLVER-GAPS — wizard y scheduler independientes |
+| R-I | Juegos especiales | Build directo | Bloque 8 | Extienden BaseGame — patrón ya establecido, bajo riesgo |
+| R-J | Hardening y cierre | Plan → Build | Bloque 9 | Toca todo el sistema — supervisión obligatoria |
+| R-K | Validación manual | **Tú** | QA.MD | Manual en Discord real |
+| R-L | Despliegue y entrega | Build directo | — | Setup final — README + PM2, bajo riesgo |
 
 ---
 

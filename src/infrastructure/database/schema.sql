@@ -140,8 +140,8 @@ CREATE TABLE IF NOT EXISTS guild_config (
   prefix                TEXT DEFAULT '!',
   game_channel_id       TEXT,
   log_channel_id        TEXT,
-  drop_interval_min     INTEGER DEFAULT 15,
-  drop_interval_max     INTEGER DEFAULT 60,
+  drop_interval_min     INTEGER DEFAULT 15,  -- minutos
+  drop_interval_max     INTEGER DEFAULT 60,  -- minutos
   max_players_per_game  INTEGER DEFAULT 10,
   min_players_per_game  INTEGER DEFAULT 2,
   lobby_wait_seconds    INTEGER DEFAULT 30,
