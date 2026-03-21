@@ -2,6 +2,13 @@ import { GameType } from '../../types/game.types';
 import { GameStrategy } from '../../domain/games/base/GameStrategy';
 import { BaseGame } from '../../domain/games/base/BaseGame';
 import { TriviaGame } from '../../domain/games/builtin/TriviaGame';
+import { ReactionGame } from '../../domain/games/builtin/ReactionGame';
+import { MathGame } from '../../domain/games/builtin/MathGame';
+import { WordPuzzleGame } from '../../domain/games/builtin/WordPuzzleGame';
+import { DiceGame } from '../../domain/games/builtin/DiceGame';
+import { SpinWheelGame } from '../../domain/games/builtin/SpinWheelGame';
+import { GuessingGame } from '../../domain/games/builtin/GuessingGame';
+import { EliminationGame } from '../../domain/games/builtin/EliminationGame';
 import { GameRegistry } from './GameRegistry';
 import { TextChannel, Guild } from 'discord.js';
 import { LiveMessageManager } from '../../presentation/live/LiveMessageManager';
@@ -99,19 +106,34 @@ export class GameFactory {
     guild: Guild,
     startedBy: string
   ): BaseGame {
+    const createDeps = () =>
+      [
+        channel,
+        guild,
+        startedBy,
+        this.deps.liveMessageManager,
+        this.deps.scopedEventEmitter,
+        this.deps.db,
+        this.deps.guildConfigService,
+      ] as const;
+
     switch (gameType) {
       case 'trivia':
-        return new TriviaGame(
-          channel,
-          guild,
-          startedBy,
-          this.deps.liveMessageManager,
-          this.deps.scopedEventEmitter,
-          this.deps.db,
-          this.deps.guildConfigService
-        );
-
-      // Los demás juegos se agregan en R-F
+        return new TriviaGame(...createDeps());
+      case 'reaction':
+        return new ReactionGame(...createDeps());
+      case 'math':
+        return new MathGame(...createDeps());
+      case 'wordpuzzle':
+        return new WordPuzzleGame(...createDeps());
+      case 'dice':
+        return new DiceGame(...createDeps());
+      case 'spinwheel':
+        return new SpinWheelGame(...createDeps());
+      case 'guessing':
+        return new GuessingGame(...createDeps());
+      case 'elimination':
+        return new EliminationGame(...createDeps());
       default:
         throw new Error(`Unsupported game type: ${gameType}`);
     }

@@ -105,9 +105,24 @@ export class GameOrchestrator {
    * Registra las estrategias de juego disponibles en el registry.
    */
   private registerGameStrategies(): void {
-    // Registrar TriviaGameStrategy
     const { TriviaGameStrategy } = require('../../domain/games/builtin/TriviaGame');
+    const { ReactionGameStrategy } = require('../../domain/games/builtin/ReactionGame');
+    const { MathGameStrategy } = require('../../domain/games/builtin/MathGame');
+    const { WordPuzzleGameStrategy } = require('../../domain/games/builtin/WordPuzzleGame');
+    const { DiceGameStrategy } = require('../../domain/games/builtin/DiceGame');
+    const { SpinWheelGameStrategy } = require('../../domain/games/builtin/SpinWheelGame');
+    const { GuessingGameStrategy } = require('../../domain/games/builtin/GuessingGame');
+    const { EliminationGameStrategy } = require('../../domain/games/builtin/EliminationGame');
+
     gameRegistry.register(new TriviaGameStrategy());
+    gameRegistry.register(new ReactionGameStrategy());
+    gameRegistry.register(new MathGameStrategy());
+    gameRegistry.register(new WordPuzzleGameStrategy());
+    gameRegistry.register(new DiceGameStrategy());
+    gameRegistry.register(new SpinWheelGameStrategy());
+    gameRegistry.register(new GuessingGameStrategy());
+    gameRegistry.register(new EliminationGameStrategy());
+
     SystemLogger.info('Game strategies registered', {
       available: gameRegistry.getAll().map(s => s.gameType),
     });
