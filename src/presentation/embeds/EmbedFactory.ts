@@ -248,7 +248,7 @@ export class EmbedFactory {
         { name: '💰 Prize', value: data.prizeName, inline: true },
         { name: '🎁 Reward', value: data.rewardDescription }
       )
-      .setDescription('Your prize has been added to your account!');
+      .setFooter({ text: 'Your prize has been added to your account!' });
   }
 
   static winnerChannel(data: {
@@ -266,7 +266,7 @@ export class EmbedFactory {
         { name: '💰 Prize', value: data.prizeName, inline: true },
         { name: '🎁 Reward', value: data.rewardDescription }
       )
-      .setDescription('Your prize has been added to your account!');
+      .setFooter({ text: 'Your prize has been added to your account!' });
   }
 
   static prizeDrop(data: PrizeDropData): EmbedBuilder {

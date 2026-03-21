@@ -18,6 +18,7 @@ import { Guild } from 'discord.js';
 import { StartCommand } from '../../presentation/commands/admin/StartCommand';
 import { JoinCommand } from '../../presentation/commands/player/JoinCommand';
 import { PlayCommand } from '../../presentation/commands/player/PlayCommand';
+import { RewardCommand } from '../../presentation/commands/player/RewardCommand';
 
 export interface CommandRegistryDeps {
   userRepository: IUserRepository;
@@ -54,6 +55,7 @@ export class CommandRegistry {
     this.register(new StartCommand());
     this.register(new JoinCommand());
     this.register(new PlayCommand());
+    this.register(new RewardCommand());
   }
 
   register(command: BotCommand): void {
