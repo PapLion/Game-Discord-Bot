@@ -9,6 +9,11 @@ import { DiceGame } from '../../domain/games/builtin/DiceGame';
 import { SpinWheelGame } from '../../domain/games/builtin/SpinWheelGame';
 import { GuessingGame } from '../../domain/games/builtin/GuessingGame';
 import { EliminationGame } from '../../domain/games/builtin/EliminationGame';
+import { TournamentGame } from '../../domain/games/special/TournamentGame';
+import { EventTriviaGame } from '../../domain/games/special/EventTriviaGame';
+import { HighStakesGame } from '../../domain/games/special/HighStakesGame';
+import { MidnightDropGame } from '../../domain/games/special/MidnightDropGame';
+import { BossBattleGame } from '../../domain/games/special/BossBattleGame';
 import { GameRegistry } from './GameRegistry';
 import { TextChannel, Guild } from 'discord.js';
 import { LiveMessageManager } from '../../presentation/live/LiveMessageManager';
@@ -134,6 +139,16 @@ export class GameFactory {
         return new GuessingGame(...createDeps());
       case 'elimination':
         return new EliminationGame(...createDeps());
+      case 'tournament':
+        return new TournamentGame(...createDeps());
+      case 'eventtrivia':
+        return new EventTriviaGame(...createDeps());
+      case 'highstakes':
+        return new HighStakesGame(...createDeps());
+      case 'midnightdrop':
+        return new MidnightDropGame(...createDeps());
+      case 'bossbattle':
+        return new BossBattleGame(...createDeps());
       default:
         throw new Error(`Unsupported game type: ${gameType}`);
     }

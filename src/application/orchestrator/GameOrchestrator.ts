@@ -12,8 +12,9 @@ import { EmbedFactory } from '../../presentation/embeds/EmbedFactory';
 import { GameError, ERROR_CODES } from '../../types/errors';
 import { SystemLogger } from '../../infrastructure/logger/SystemLogger';
 import { auditLogger } from '../../infrastructure/logger/AuditLogger';
-import { GAME_CONSTANTS } from '../../types/GAME_CONSTANTS';
+import { GAME_CONSTANTS, SPECIAL_GAME_TYPES } from '../../types/GAME_CONSTANTS';
 import { leaderboardCache } from '../../infrastructure/cache/LeaderboardCache';
+import { specialAccessService } from '../../domain/games/SpecialAccessService';
 
 /**
  * Mapeo de aliases de tipos de juego a GameType.
@@ -114,6 +115,11 @@ export class GameOrchestrator {
     const { SpinWheelGameStrategy } = require('../../domain/games/builtin/SpinWheelGame');
     const { GuessingGameStrategy } = require('../../domain/games/builtin/GuessingGame');
     const { EliminationGameStrategy } = require('../../domain/games/builtin/EliminationGame');
+    const { TournamentGameStrategy } = require('../../domain/games/special/TournamentGame');
+    const { EventTriviaGameStrategy } = require('../../domain/games/special/EventTriviaGame');
+    const { HighStakesGameStrategy } = require('../../domain/games/special/HighStakesGame');
+    const { MidnightDropGameStrategy } = require('../../domain/games/special/MidnightDropGame');
+    const { BossBattleGameStrategy } = require('../../domain/games/special/BossBattleGame');
 
     gameRegistry.register(new TriviaGameStrategy());
     gameRegistry.register(new ReactionGameStrategy());
@@ -123,6 +129,11 @@ export class GameOrchestrator {
     gameRegistry.register(new SpinWheelGameStrategy());
     gameRegistry.register(new GuessingGameStrategy());
     gameRegistry.register(new EliminationGameStrategy());
+    gameRegistry.register(new TournamentGameStrategy());
+    gameRegistry.register(new EventTriviaGameStrategy());
+    gameRegistry.register(new HighStakesGameStrategy());
+    gameRegistry.register(new MidnightDropGameStrategy());
+    gameRegistry.register(new BossBattleGameStrategy());
 
     SystemLogger.info('Game strategies registered', {
       available: gameRegistry.getAll().map(s => s.gameType),
@@ -243,10 +254,16 @@ export class GameOrchestrator {
       );
     }
 
-    // 2. Agregar participante al juego
+    // 2. Validar special_access para juegos especiales
+    const gameType = (game as unknown as { strategy: { gameType: string } }).strategy.gameType;
+    if (SPECIAL_GAME_TYPES.includes(gameType as (typeof SPECIAL_GAME_TYPES)[number])) {
+      specialAccessService.hasValidAccessOrThrow(userId, gameType);
+    }
+
+    // 3. Agregar participante al juego
     await game.addParticipant(userId, discordId, username);
 
-    // 3. Responder confirmación
+    // 4. Responder confirmación
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await ctx.reply({
       embeds: [EmbedFactory.success(`<@${discordId}> te uniste al juego!`) as any],
@@ -256,6 +273,7 @@ export class GameOrchestrator {
       guildId,
       userId,
       discordId,
+      gameType,
     });
   }
 

@@ -1,7 +1,23 @@
+export const SPECIAL_GAME_TYPES = [
+  'tournament',
+  'eventtrivia',
+  'highstakes',
+  'midnightdrop',
+  'bossbattle',
+] as const;
+
+export type SpecialGameType = (typeof SPECIAL_GAME_TYPES)[number];
+
 export const GAME_CONSTANTS = {
   LOBBY_WAIT_SECONDS: 30,
   MIN_PLAYERS: 2,
   MAX_PLAYERS: 10,
+  TOURNAMENT_MIN_PLAYERS: 4,
+  TOURNAMENT_MAX_PLAYERS: 8,
+  HIGHSTAKES_MIN_BET: 50,
+  MIDNIGHTDROP_MAX_PARTICIPANTS: 50,
+  BOSS_HP_PER_PLAYER: 100,
+  BOSS_DAMAGE_PER_CORRECT: 10,
   MIN_REACTION_MS: 80,
   SPAM_WINDOW_MS: 3000,
   SPAM_MAX_MESSAGES: 5,
