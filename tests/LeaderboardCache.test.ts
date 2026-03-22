@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { LeaderboardCache } from '../src/infrastructure/cache/LeaderboardCache';
 import { DatabaseService } from '../src/infrastructure/database/DatabaseService';
 import { GAME_CONSTANTS } from '../src/types/GAME_CONSTANTS';

@@ -290,6 +290,10 @@ export class StreakSystem implements IStreakSystem {
     return StreakSystem.instance;
   }
 
+  static resetForTesting(): void {
+    StreakSystem.instance = null as unknown as StreakSystem;
+  }
+
   async getStreakInfo(userId: string): Promise<StreakInfo> {
     const user = await this.userRepo.findByDiscordId(userId, userId);
 

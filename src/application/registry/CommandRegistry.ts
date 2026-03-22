@@ -16,6 +16,11 @@ import { SessionValidationMiddleware } from '../middleware/SessionValidationMidd
 import { EmbedFactory } from '../../presentation/embeds/EmbedFactory';
 import { Guild } from 'discord.js';
 import { StartCommand } from '../../presentation/commands/admin/StartCommand';
+import { DropCommand } from '../../presentation/commands/admin/DropCommand';
+import { AddCodesCommand } from '../../presentation/commands/admin/AddCodesCommand';
+import { PrizesCommand } from '../../presentation/commands/admin/PrizesCommand';
+import { CreateGameCommand } from '../../presentation/commands/admin/CreateGameCommand';
+import { ConfigCommand } from '../../presentation/commands/admin/ConfigCommand';
 import { JoinCommand } from '../../presentation/commands/player/JoinCommand';
 import { PlayCommand } from '../../presentation/commands/player/PlayCommand';
 import { RewardCommand } from '../../presentation/commands/player/RewardCommand';
@@ -59,6 +64,11 @@ export class CommandRegistry {
 
   private registerGameCommands(): void {
     this.register(new StartCommand());
+    this.register(new DropCommand());
+    this.register(new AddCodesCommand());
+    this.register(new PrizesCommand());
+    this.register(new CreateGameCommand());
+    this.register(new ConfigCommand());
     this.register(new JoinCommand());
     this.register(new PlayCommand());
     this.register(new RewardCommand());
