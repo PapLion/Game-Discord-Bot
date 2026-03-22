@@ -103,12 +103,20 @@ describe('PermissionService', () => {
       expect(getRoleFromDiscordRoles(['OWNER_ROLE'])).toBe(BotRole.OWNER);
     });
 
+    it('returns OWNER for server_owner (case-insensitive)', () => {
+      expect(getRoleFromDiscordRoles(['server_owner'])).toBe(BotRole.OWNER);
+    });
+
     it('returns ADMIN for ADMIN', () => {
       expect(getRoleFromDiscordRoles(['ADMIN'])).toBe(BotRole.ADMIN);
     });
 
     it('returns ADMIN for ADMIN_ROLE', () => {
       expect(getRoleFromDiscordRoles(['ADMIN_ROLE'])).toBe(BotRole.ADMIN);
+    });
+
+    it('returns ADMIN for Admin (case-insensitive)', () => {
+      expect(getRoleFromDiscordRoles(['Admin'])).toBe(BotRole.ADMIN);
     });
 
     it('returns MODERATOR for MODERATOR', () => {
@@ -119,8 +127,20 @@ describe('PermissionService', () => {
       expect(getRoleFromDiscordRoles(['MOD'])).toBe(BotRole.MODERATOR);
     });
 
+    it('returns MODERATOR for moderator (case-insensitive)', () => {
+      expect(getRoleFromDiscordRoles(['moderator'])).toBe(BotRole.MODERATOR);
+    });
+
+    it('returns MODERATOR for MoD (mixed case)', () => {
+      expect(getRoleFromDiscordRoles(['MoD'])).toBe(BotRole.MODERATOR);
+    });
+
     it('returns BANNED for BANNED', () => {
       expect(getRoleFromDiscordRoles(['BANNED'])).toBe(BotRole.BANNED);
+    });
+
+    it('returns BANNED for Banned (case-insensitive)', () => {
+      expect(getRoleFromDiscordRoles(['Banned'])).toBe(BotRole.BANNED);
     });
 
     it('returns PLAYER when no role matches', () => {

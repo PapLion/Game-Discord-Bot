@@ -25,20 +25,18 @@ export function canStartGame(role: BotRole): boolean {
 }
 
 export function getRoleFromDiscordRoles(discordRoles: string[]): BotRole {
-  if (discordRoles.includes('OWNER_ROLE') || discordRoles.includes('SERVER_OWNER')) {
+  const roles = discordRoles.map(r => r.toLowerCase());
+
+  if (roles.includes('owner_role') || roles.includes('server_owner')) {
     return BotRole.OWNER;
   }
-  if (discordRoles.includes('ADMIN_ROLE') || discordRoles.includes('ADMIN')) {
+  if (roles.includes('admin_role') || roles.includes('admin')) {
     return BotRole.ADMIN;
   }
-  if (
-    discordRoles.includes('MOD_ROLE') ||
-    discordRoles.includes('MODERATOR') ||
-    discordRoles.includes('MOD')
-  ) {
+  if (roles.includes('mod_role') || roles.includes('moderator') || roles.includes('mod')) {
     return BotRole.MODERATOR;
   }
-  if (discordRoles.includes('BANNED_ROLE') || discordRoles.includes('BANNED')) {
+  if (roles.includes('banned_role') || roles.includes('banned')) {
     return BotRole.BANNED;
   }
   return BotRole.PLAYER;

@@ -35,7 +35,7 @@ import { GamesCommand } from '../../presentation/commands/player/GamesCommand';
 export interface CommandRegistryDeps {
   userRepository: IUserRepository;
   guildConfigService: GuildConfigService;
-  getUserRole: (user: User, guild?: Guild) => BotRole;
+  getUserRole: (user: User, guild?: Guild) => Promise<BotRole> | BotRole;
 }
 
 export class CommandRegistry {
@@ -43,7 +43,7 @@ export class CommandRegistry {
   private middlewareChain: Middleware[] = [];
   private userRepo: IUserRepository;
   private guildConfigService: GuildConfigService;
-  private getUserRole: (user: User, guild?: Guild) => BotRole;
+  private getUserRole: (user: User, guild?: Guild) => Promise<BotRole> | BotRole;
 
   constructor(deps?: Partial<CommandRegistryDeps>) {
     this.userRepo = deps?.userRepository ?? new UserRepository();
@@ -57,7 +57,7 @@ export class CommandRegistry {
   private registerDefaultMiddleware(): void {
     this.middlewareChain = [
       RateLimitMiddleware.getInstance(),
-      PermissionMiddleware.create((user: User) => this.getUserRole(user)),
+      PermissionMiddleware.create((user: User, guild?: Guild) => this.getUserRole(user, guild)),
       CooldownMiddleware.create(),
       AntiCheatMiddleware.create(),
       SessionValidationMiddleware.create(),
@@ -140,6 +140,7 @@ export class CommandRegistry {
         },
       };
 
+      SystemLogger.info('guild passed', { guildId: message.guild?.id });
       await this.executeWithChain(ctx, command);
     } catch (error) {
       SystemLogger.error('Command execution failed', {
