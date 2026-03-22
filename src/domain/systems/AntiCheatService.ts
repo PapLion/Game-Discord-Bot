@@ -52,15 +52,14 @@ export class AntiCheatService implements IAntiCheatService {
   }
 
   recordResponse(userId: string, timestampMs: number): boolean {
-    const now = Date.now();
     const records = this.responseHistory.get(userId) ?? [];
 
     const lastResponse = records[records.length - 1];
-    const timeSinceLastResponse = lastResponse ? now - lastResponse.timestamp : Infinity;
+    const timeSinceLastResponse = lastResponse ? timestampMs - lastResponse.timestamp : Infinity;
     const isTooFast =
       timeSinceLastResponse < GAME_CONSTANTS.MIN_REACTION_MS && lastResponse !== undefined;
 
-    records.push({ timestamp: now, isTooFast });
+    records.push({ timestamp: timestampMs, isTooFast });
     this.responseHistory.set(userId, records);
 
     if (isTooFast) {

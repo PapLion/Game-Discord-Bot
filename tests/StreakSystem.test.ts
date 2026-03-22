@@ -15,7 +15,8 @@ describe('StreakSystem', () => {
     await db.initialize(':memory:');
     auditLogger.setDatabaseService(db);
     userRepo = new UserRepository(db);
-    streakSystem = new StreakSystem(userRepo);
+    StreakSystem.resetForTesting();
+    streakSystem = StreakSystem.getInstance(userRepo);
   });
 
   afterEach(() => {
@@ -28,7 +29,7 @@ describe('StreakSystem', () => {
       db.execute(
         `INSERT INTO users (id, discord_id, guild_id, coins, streak, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [userId, 'discord-001', 'guild-001', 0, 0]
+        [userId, userId, userId, 0, 0]
       );
 
       const result = await streakSystem.claim(userId);
@@ -45,7 +46,7 @@ describe('StreakSystem', () => {
       db.execute(
         `INSERT INTO users (id, discord_id, guild_id, coins, streak, last_daily, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [userId, 'discord-001', 'guild-001', 0, 5, yesterday.toISOString()]
+        [userId, userId, userId, 0, 5, yesterday.toISOString()]
       );
 
       const result = await streakSystem.claim(userId);
@@ -60,7 +61,7 @@ describe('StreakSystem', () => {
       db.execute(
         `INSERT INTO users (id, discord_id, guild_id, coins, streak, last_daily, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [userId, 'discord-001', 'guild-001', 0, 5, tenHoursAgo.toISOString()]
+        [userId, userId, userId, 0, 5, tenHoursAgo.toISOString()]
       );
 
       const result = await streakSystem.claim(userId);
@@ -74,7 +75,7 @@ describe('StreakSystem', () => {
       db.execute(
         `INSERT INTO users (id, discord_id, guild_id, coins, streak, last_daily, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [userId, 'discord-001', 'guild-001', 0, 5, thirtyHoursAgo.toISOString()]
+        [userId, userId, userId, 0, 5, thirtyHoursAgo.toISOString()]
       );
 
       const result = await streakSystem.claim(userId);
@@ -93,11 +94,11 @@ describe('StreakSystem', () => {
 
     it('days 7-13 → multiplier x2.0', async () => {
       const userId = 'test-user-7';
-      const sixDaysAgo = new Date(Date.now() - 24 * 6 * 60 * 60 * 1000);
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
       db.execute(
         `INSERT INTO users (id, discord_id, guild_id, coins, streak, last_daily, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [userId, 'discord-7', 'guild-001', 0, 6, sixDaysAgo.toISOString()]
+        [userId, userId, userId, 0, 7, yesterday.toISOString()]
       );
 
       const result = await streakSystem.claim(userId);
@@ -107,11 +108,11 @@ describe('StreakSystem', () => {
 
     it('days 14-29 → multiplier x3.0', async () => {
       const userId = 'test-user-14';
-      const thirteenDaysAgo = new Date(Date.now() - 24 * 13 * 60 * 60 * 1000);
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
       db.execute(
         `INSERT INTO users (id, discord_id, guild_id, coins, streak, last_daily, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [userId, 'discord-14', 'guild-001', 0, 13, thirteenDaysAgo.toISOString()]
+        [userId, userId, userId, 0, 14, yesterday.toISOString()]
       );
 
       const result = await streakSystem.claim(userId);
@@ -121,11 +122,11 @@ describe('StreakSystem', () => {
 
     it('days 30+ → multiplier x5.0 (maxed)', async () => {
       const userId = 'test-user-30';
-      const twentyNineDaysAgo = new Date(Date.now() - 24 * 29 * 60 * 60 * 1000);
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
       db.execute(
         `INSERT INTO users (id, discord_id, guild_id, coins, streak, last_daily, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [userId, 'discord-30', 'guild-001', 0, 29, twentyNineDaysAgo.toISOString()]
+        [userId, userId, userId, 0, 30, yesterday.toISOString()]
       );
 
       const result = await streakSystem.claim(userId);
@@ -144,7 +145,7 @@ describe('StreakSystem', () => {
       db.execute(
         `INSERT INTO users (id, discord_id, guild_id, coins, streak, last_daily, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [userId, 'discord-midnight', 'guild-001', 0, 1, claimTime.toISOString()]
+        [userId, userId, userId, 0, 1, claimTime.toISOString()]
       );
 
       const result = await streakSystem.claim(userId);

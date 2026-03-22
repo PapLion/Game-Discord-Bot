@@ -3,6 +3,7 @@ import { BotRole } from '../../../domain/players/PermissionService';
 import { EmbedFactory } from '../../embeds/EmbedFactory';
 import { SystemLogger } from '../../../infrastructure/logger/SystemLogger';
 import { gameRegistry } from '../../../infrastructure/plugins/GameRegistry';
+import { GameBuilder } from '../../../domain/games/GameBuilder';
 
 const GAME_INFO: Record<
   string,
@@ -118,6 +119,27 @@ export class GamesCommand implements BotCommand {
       duration: info.duration,
       rewards: info.prize,
     }));
+
+    try {
+      const builder = new GameBuilder();
+      const customGames = builder.listCustom(ctx.guildId);
+
+      for (const custom of customGames) {
+        const config = JSON.parse(custom.config);
+        const prizeDisplay =
+          config.prizeType === 'coins' ? `${config.prizeValue} coins` : config.prizeType;
+        builtin.push({
+          name: custom.name,
+          duration: 'custom',
+          rewards: prizeDisplay,
+        });
+      }
+    } catch (error) {
+      SystemLogger.error('GamesCommand: failed to load custom games', {
+        error: error instanceof Error ? error.message : String(error),
+        guildId: ctx.guildId,
+      });
+    }
 
     const special: { name: string; description: string }[] = [];
 
