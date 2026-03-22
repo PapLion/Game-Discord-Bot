@@ -10,7 +10,7 @@ export interface PermissionMiddlewareContext extends CommandContext {
 }
 
 export interface PermissionMiddlewareDeps {
-  getUserRole: (user: User) => BotRole;
+  getUserRole: (user: User, guild?: import('discord.js').Guild) => Promise<BotRole> | BotRole;
 }
 
 const parseRoleString = (roleStr: string): BotRole => {
@@ -36,7 +36,10 @@ const parseRoleString = (roleStr: string): BotRole => {
 };
 
 export class PermissionMiddleware extends BaseMiddleware {
-  private getUserRole: (user: User) => BotRole;
+  private getUserRole: (
+    user: User,
+    guild?: import('discord.js').Guild
+  ) => Promise<BotRole> | BotRole;
 
   constructor(deps: PermissionMiddlewareDeps) {
     super();
@@ -58,7 +61,8 @@ export class PermissionMiddleware extends BaseMiddleware {
       return;
     }
 
-    const userRole = this.getUserRole(user);
+    const guild = ctx.message?.guild ?? undefined;
+    const userRole = await this.getUserRole(user, guild);
     const requiredRole = command.requiredRole;
 
     if (!hasPermission(userRole, requiredRole)) {
@@ -72,7 +76,9 @@ export class PermissionMiddleware extends BaseMiddleware {
     await next();
   }
 
-  static create(getUserRole: (user: User) => BotRole): Middleware {
+  static create(
+    getUserRole: (user: User, guild?: import('discord.js').Guild) => Promise<BotRole> | BotRole
+  ): Middleware {
     return new PermissionMiddleware({ getUserRole });
   }
 }

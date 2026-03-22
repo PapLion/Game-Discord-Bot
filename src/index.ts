@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Client, GatewayIntentBits, Guild, TextChannel } from 'discord.js';
 import { DatabaseService } from './infrastructure/database/DatabaseService';
 import { SystemLogger } from './infrastructure/logger/SystemLogger';
@@ -10,6 +11,8 @@ import { healthCheck } from './infrastructure/health/HealthCheck';
 import { backupScheduler } from './infrastructure/scheduler/BackupScheduler';
 import { prizeDropScheduler } from './infrastructure/scheduler/PrizeDropScheduler';
 import { EmbedFactory } from './presentation/embeds/EmbedFactory';
+import { getRoleFromDiscordRoles, BotRole } from './domain/players/PermissionService';
+import { User } from './types/player.types';
 
 const SHUTDOWN_TIMEOUT_MS = 10000;
 
@@ -36,6 +39,42 @@ let commandRegistry: CommandRegistry;
 let guildConfigService: GuildConfigService;
 let isShuttingDown = false;
 
+async function getUserRole(user: User, guild?: Guild): Promise<BotRole> {
+  if (!guild) {
+    SystemLogger.warn('getUserRole: no guild', { userId: user?.id });
+    return BotRole.PLAYER;
+  }
+
+  SystemLogger.info('getUserRole called', {
+    userId: user?.id,
+    discordId: user?.discordId,
+    guildOwnerId: guild.ownerId,
+  });
+
+  if (guild.ownerId === user.discordId) {
+    SystemLogger.info('getUserRole: user is owner');
+    return BotRole.OWNER;
+  }
+
+  try {
+    const member =
+      guild.members.cache.get(user.discordId) ?? (await guild.members.fetch(user.discordId));
+
+    SystemLogger.info('getUserRole: member roles', {
+      roles: member?.roles.cache.map(r => r.name),
+    });
+
+    if (!member) return BotRole.PLAYER;
+    const roleNames = member.roles.cache.map(r => r.name);
+    const role = getRoleFromDiscordRoles(roleNames);
+    SystemLogger.info('getUserRole: resolved role', { role });
+    return role;
+  } catch (error) {
+    SystemLogger.error('getUserRole: fetch failed', { error });
+    return BotRole.PLAYER;
+  }
+}
+
 async function validateEnv(): Promise<void> {
   if (!process.env.BOT_TOKEN?.trim()) {
     SystemLogger.error('Missing required env var: BOT_TOKEN');
@@ -57,6 +96,7 @@ async function initializeBot(): Promise<void> {
 
     commandRegistry = createCommandRegistry({
       guildConfigService,
+      getUserRole,
     });
 
     SystemLogger.info('Bot initialization complete');
@@ -221,6 +261,10 @@ client.on('guildCreate', guild => {
 });
 
 client.on('messageCreate', async message => {
+  if (message.author.bot) return;
+  if (!message.guild) return;
+  if (!message.content.startsWith('!')) return;
+
   if (commandRegistry) {
     await commandRegistry.handleMessage(message);
   }
