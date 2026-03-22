@@ -13,6 +13,7 @@ import { PermissionMiddleware } from '../middleware/PermissionMiddleware';
 import { CooldownMiddleware } from '../middleware/CooldownMiddleware';
 import { AntiCheatMiddleware } from '../middleware/AntiCheatMiddleware';
 import { SessionValidationMiddleware } from '../middleware/SessionValidationMiddleware';
+import { RateLimitMiddleware } from '../middleware/RateLimitMiddleware';
 import { EmbedFactory } from '../../presentation/embeds/EmbedFactory';
 import { Guild } from 'discord.js';
 import { StartCommand } from '../../presentation/commands/admin/StartCommand';
@@ -55,6 +56,7 @@ export class CommandRegistry {
 
   private registerDefaultMiddleware(): void {
     this.middlewareChain = [
+      RateLimitMiddleware.getInstance(),
       PermissionMiddleware.create((user: User) => this.getUserRole(user)),
       CooldownMiddleware.create(),
       AntiCheatMiddleware.create(),
